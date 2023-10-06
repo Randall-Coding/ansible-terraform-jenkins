@@ -1,1 +1,1 @@
-This is just practice work using Terraform on AWS.
+Example project using Ansible + Terraform on AWS.
