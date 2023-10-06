@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus Monitoring
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=ubuntu
+Group=prometheus
+Type=simple
+WorkingDirectory=/home/ubuntu/prometheus-2.47.1.linux-amd64
+ExecStart=/home/ubuntu/prometheus-2.47.1.linux-amd64/prometheus
+
+[Install]
+WantedBy=multi-user.target

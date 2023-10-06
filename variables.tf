@@ -67,3 +67,8 @@ variable "ip" {
     dev  = "10.0.51.0/24"
   }
 }
+
+variable "my_aws_pem" {
+  type = string
+  default = "MyAWSKey.pem"
+}

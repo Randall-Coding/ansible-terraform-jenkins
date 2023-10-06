@@ -165,7 +165,7 @@ resource "aws_instance" "web_server" {
   vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
 
   provisioner "local-exec" {
-    command = "echo ${self.public_ip} >> aws_hosts"
+    command = "printf '\n${self.public_ip}' >> aws_hosts"
   }
 }
 
@@ -301,6 +301,9 @@ resource "aws_subnet" "list_subnet" {
   }
 }
 
-output "web_server-ip" {
-  value = aws_instance.web_server.public_ip
+resource "null_resource" "grafana_install" {
+  depends_on = [ aws_instance.web_server ]
+  provisioner "local-exec" {
+    command = "ansible-playbook ./playbooks/grafana-prometheus.yml -i aws_hosts --private-key=${var.my_aws_pem} -u ubuntu"
+  }
 }

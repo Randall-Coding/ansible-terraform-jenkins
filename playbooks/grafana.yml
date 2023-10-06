@@ -4,13 +4,9 @@
   become: yes
 
   vars:
-    new_hostname: "Grafana server"
-
+    - ansible_ssh_common_args: '-o IdentitiesOnly=yes'
+  
   tasks:
-    - name: Set the hostname
-      hostname:
-        name: "{{ new_hostname }}"
-
     - name: Install required packages
       apt:
         name:

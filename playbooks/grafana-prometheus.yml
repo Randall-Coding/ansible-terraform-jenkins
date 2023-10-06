@@ -1,0 +1,81 @@
+---
+# Grafana
+- name: Install Grafana 
+  import_playbook: grafana.yml  
+
+# Prometheus
+- name: Install Prometheus
+  import_playbook: prometheus.yml  
+
+# - name: Bootstrap server
+#   hosts: main 
+#   become: yes
+
+#   vars:
+#     - ansible_ssh_common_args: '-o IdentitiesOnly=yes'
+
+  # tasks:
+
+  # # Grafana
+  #   - name: Install required packages
+  #     apt:
+  #       name:
+  #         - apt-transport-https
+  #         - software-properties-common
+  #         - wget
+  #       state: present
+  #       update_cache: yes
+
+  #   - name: Add Grafana GPG key
+  #     apt_key:
+  #       url: "https://packages.grafana.com/gpg.key"
+  #       state: present
+
+  #   - name: Add Grafana APT repository
+  #     apt_repository:
+  #       repo: "deb https://packages.grafana.com/oss/deb stable main"
+  #       state: present
+  #       filename: grafana
+
+  #   - name: Update and install Grafana
+  #     apt:
+  #       name: grafana
+  #       state: present
+  #       update_cache: yes
+
+  #   - name: Start Grafana server
+  #     systemd:
+  #       name: grafana-server
+  #       state: started
+  #       enabled: yes
+
+  # # Prometheus
+  #   - name: Download Prometheus 
+  #     get_url: 
+  #       url: https://github.com/prometheus/prometheus/releases/download/v2.47.1/prometheus-2.47.1.linux-amd64.tar.gz
+  #       dest: /home/ubuntu/prometheus-2.47.1.linux-amd64.tar.gz
+
+  #   - name: Decompress Prometheus
+  #     unarchive:
+  #       src: /home/ubuntu/prometheus-2.47.1.linux-amd64.tar.gz
+  #       dest: /home/ubuntu/prometheus
+  #       remote_src: yes
+
+  #   # Assuming your app has a systemd service file included
+  #   - name: Copy the systemd service file
+  #     copy:
+  #       src: ./prometheus.server
+  #       dest: /etc/systemd/system/prometheus.service
+  #       owner: root
+  #       group: root
+  #       mode: '0644'
+
+  #   - name: Reload systemd to recognize the new service
+  #     systemd:
+  #       daemon_reload: yes
+
+  #   - name: Start and enable the app service
+  #     service:
+  #       name: prometheus
+  #       enabled: yes
+  #       state: started

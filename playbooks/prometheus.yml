@@ -1,0 +1,63 @@
+---
+- name: Install prometheus
+  hosts: main 
+  become: yes
+
+  vars:
+    - ansible_ssh_common_args: '-o IdentitiesOnly=yes'
+  tasks: 
+    - name: Ensure the prometheus group exists
+      group:
+        name: prometheus
+        state: present
+
+    - name: Ensure user is a member of prometheus group
+      user:
+        name: ubuntu
+        groups: prometheus
+        append: yes
+
+    - name: Download Prometheus 
+      get_url: 
+        url: https://github.com/prometheus/prometheus/releases/download/v2.47.1/prometheus-2.47.1.linux-amd64.tar.gz
+        dest: /home/ubuntu/prometheus-2.47.1.linux-amd64.tar.gz
+
+    - name: Change ownership of the Prometheus tar
+      file:
+        path: /home/ubuntu/prometheus-2.47.1.linux-amd64.tar.gz
+        owner: ubuntu
+        group: ubuntu
+        state: file
+
+    - name: Decompress Prometheus
+      unarchive:
+        src: /home/ubuntu/prometheus-2.47.1.linux-amd64.tar.gz
+        dest: /home/ubuntu/
+        remote_src: yes
+
+    - name: Change ownership of the Prometheus directory
+      file:
+        path: /home/ubuntu/prometheus-2.47.1.linux-amd64
+        owner: ubuntu
+        group: ubuntu
+        recurse: yes
+        state: directory
+        
+    # Assuming your app has a systemd service file included
+    - name: Copy the systemd service file
+      copy:
+        src: ./prometheus.service
+        dest: /etc/systemd/system/prometheus.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd to recognize the new service
+      systemd:
+        daemon_reload: yes
+
+    - name: Start and enable the app service
+      systemd:
+        name: prometheus
+        enabled: yes
+        state: started
