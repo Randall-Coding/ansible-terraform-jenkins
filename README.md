@@ -10,3 +10,5 @@ Or configure the ansible cfg with:
   [defaults]
   ssh_args = -o IdentitiesOnly=yes
 
+# Run Jenkins playbook
+ansible-playbook playbooks/jenkins.yml -i jenkins_host -K
