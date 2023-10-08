@@ -16,16 +16,20 @@
         repo: deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]  https://pkg.jenkins.io/debian-stable binary/
         state: present
         filename: jenkins
-    - name: Install Jenkins
-      apt:
-        name: jenkins
-        update_cache: true
-
+    - name: Ensure ca-certificates is up-to-date
+      ansible.builtin.apt:
+        name: ca-certificates
+        state: latest
+        update_cache: yes
     - name: Install java
       apt:
         name:
           - fontconfig
           - openjdk-17-jre
+        update_cache: true
+    - name: Install Jenkins
+      apt:
+        name: jenkins
         update_cache: true
     - name: Start Jenkins service
       systemd_service:

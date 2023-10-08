@@ -35,5 +35,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 *.pem
+
 .git/
 aws_hosts
+*_host
+*_hosts
+.vscode

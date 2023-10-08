@@ -72,3 +72,8 @@ variable "my_aws_pem" {
   type = string
   default = "MyAWSKey.pem"
 }
+
+variable "aws_jenkins_pem" {
+  type = string
+  default = "MyAWSKey.pem"
+}

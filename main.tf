@@ -169,6 +169,25 @@ resource "aws_instance" "web_server" {
   }
 }
 
+# Jenkins server
+resource "aws_instance" "jenkins" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id
+  tags = {
+    Name  = "Jenkins"
+    Owner = "DevOps"
+    App   = local.application
+  }
+  key_name               = aws_key_pair.developer.key_name
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_jenkins.id]
+
+  provisioner "local-exec" {
+    command = "printf '[jenkins]\n${self.public_ip}' > jenkins_host"
+  }
+}
+
+
 resource "aws_security_group" "allow_web" {
   name        = "allow_web"
   description = "Allow TLS inbound traffic"
@@ -249,6 +268,33 @@ resource "aws_security_group" "ingress-443" {
   }
 }
 
+resource "aws_security_group" "allow_jenkins" {
+  name        = "allow_jenkins"
+  description = "Allow tcp inbound port 8080"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress {
+    description = "TCP to 8080 for jenkins"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "allow_jenkins"
+  }
+}
+
+
 resource "aws_security_group" "main" {
   name = "main-global"
 
@@ -305,5 +351,12 @@ resource "null_resource" "grafana_install" {
   depends_on = [ aws_instance.web_server ]
   provisioner "local-exec" {
     command = "ansible-playbook ./playbooks/grafana-prometheus.yml -i aws_hosts --private-key=${var.my_aws_pem} -u ubuntu"
+  }
+}
+
+resource "null_resource" "jenkins_install" {
+  depends_on = [ aws_instance.jenkins ]
+  provisioner "local-exec" {
+    command = "ansible-playbook ./playbooks/jenkins.yml -i jenkins_host --private-key=${var.my_aws_pem} -u ubuntu"
   }
 }
