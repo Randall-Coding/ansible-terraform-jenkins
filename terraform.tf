@@ -3,4 +3,11 @@ terraform {
   required_providers {
     tls = "3.1.0"
   }
+
+  cloud {
+    organization = "randallcoding"
+    workspaces {
+      name = "ansible-terraform-project"
+    }
+  }
 }
