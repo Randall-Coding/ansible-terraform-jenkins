@@ -165,7 +165,7 @@ resource "aws_instance" "web_server" {
   vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
 
   provisioner "local-exec" {
-    command = "printf '\n${self.public_ip}' >> aws_hosts"
+    command = "printf '[main]\n${self.public_ip}' > aws_hosts"
   }
 }
 
@@ -184,6 +184,10 @@ resource "aws_instance" "jenkins" {
 
   provisioner "local-exec" {
     command = "printf '[jenkins]\n${self.public_ip}' > jenkins_host"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 

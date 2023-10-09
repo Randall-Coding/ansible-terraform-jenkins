@@ -41,3 +41,4 @@ aws_hosts
 *_host
 *_hosts
 .vscode
+*.retry

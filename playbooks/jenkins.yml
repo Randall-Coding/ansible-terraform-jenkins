@@ -1,5 +1,5 @@
 ---
-- name: Install Jenkins
+- name: Install jenkins
   hosts: jenkins
   become: yes
 
@@ -37,3 +37,37 @@
         enabled: true
         state: started
         
+- name: Install terraform
+  hosts: jenkins
+  become: yes
+  vars:
+    - ansible_ssh_common_args: '-o IdentitiesOnly=yes'
+  
+  tasks:
+    - name: Install dependencies
+      apt: 
+        name:
+          - gnupg
+          - software-properties-common
+        update_cache: true
+    
+    - name: Download keyring
+      get_url: 
+        url: https://apt.releases.hashicorp.com/gpg
+        dest:  /tmp/hashicorp.gpg
+
+    - name: Dearmor gpg
+      command:
+        cmd: "sudo gpg -o  /usr/share/keyrings/hashicorp-archive-keyring.gpg --dearmor /tmp/hashicorp.gpg"
+        creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+    - name: Add repo
+      apt_repository: 
+        repo: deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com focal  main
+        filename: hashicorp
+
+    - name: Install terraform
+      apt:
+        name: terraform
+        update_cache: true
+  
