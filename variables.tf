@@ -1,6 +1,6 @@
 variable "aws_region" {
   type    = string
-  default = "us-east-1"
+  default = "us-west-2"
 }
 variable "vpc_name" {
   type    = string
@@ -69,11 +69,11 @@ variable "ip" {
 }
 
 variable "my_aws_pem" {
-  type = string
+  type    = string
   default = "MyAWSKey.pem"
 }
 
 variable "aws_jenkins_pem" {
-  type = string
+  type    = string
   default = "MyAWSKey.pem"
 }

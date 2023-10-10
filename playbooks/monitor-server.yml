@@ -1,0 +1,8 @@
+---
+# Grafana
+- name: Install Grafana 
+  import_playbook: grafana.yml  
+
+# Prometheus
+- name: Install Prometheus
+  import_playbook: prometheus.yml  

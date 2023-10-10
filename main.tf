@@ -1,6 +1,6 @@
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-west-2"
+  region = var.aws_region
 }
 
 data "aws_availability_zones" "available" {}
@@ -17,6 +17,8 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
   owners = ["099720109477"]
+}
+data "aws_security_groups" "security_groups" { # needed for output
 }
 
 locals {
@@ -168,29 +170,6 @@ resource "aws_instance" "web_server" {
     command = "printf '[main]\n${self.public_ip}' > aws_hosts"
   }
 }
-
-# Jenkins server
-resource "aws_instance" "jenkins" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id
-  tags = {
-    Name  = "Jenkins"
-    Owner = "DevOps"
-    App   = local.application
-  }
-  key_name               = aws_key_pair.developer.key_name
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_jenkins.id]
-
-  provisioner "local-exec" {
-    command = "printf '[jenkins]\n${self.public_ip}' > jenkins_host"
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
 
 resource "aws_security_group" "allow_web" {
   name        = "allow_web"
@@ -377,15 +356,8 @@ resource "aws_subnet" "list_subnet" {
 }
 
 resource "null_resource" "grafana_install" {
-  depends_on = [ aws_instance.web_server ]
+  depends_on = [aws_instance.web_server]
   provisioner "local-exec" {
-    command = "ansible-playbook ./playbooks/grafana-prometheus.yml -i aws_hosts --private-key=${var.my_aws_pem} -u ubuntu"
-  }
-}
-
-resource "null_resource" "jenkins_install" {
-  depends_on = [ aws_instance.jenkins ]
-  provisioner "local-exec" {
-    command = "ansible-playbook ./playbooks/jenkins.yml -i jenkins_host --private-key=${var.my_aws_pem} -u ubuntu"
+    command = "ansible-playbook ./playbooks/monitor-server.yml -i aws_hosts --private-key=${var.my_aws_pem} -u ubuntu"
   }
 }
