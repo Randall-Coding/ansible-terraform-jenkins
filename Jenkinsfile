@@ -19,13 +19,17 @@ pipeline {
             }
         }
         stage('Apply Confirm') {
+            input {
+                message: "Apply Confirmation"
+                ok: "Apply changes"
+            }
             steps {
                 echo 'Apply proceeding...'
             }
         }
         stage('Apply') {
             steps {
-                sh 'terraform apply -auto-aprove -no-color'
+                sh 'terraform apply -auto-approve -no-color'
             }
         }
         // Destroy because this is a test
