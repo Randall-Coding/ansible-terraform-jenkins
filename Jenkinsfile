@@ -6,7 +6,7 @@ pipeline {
         TF_CLI_CONFIG_FILE = credentials('tf-cloud')
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        TF_VAR_my_aws_var = '/home/ubuntu/MyAWSKey.pem'
+        TF_VAR_my_aws_pem = '/home/ubuntu/MyAWSKey.pem'
     }
     stages {
         stage('Init') {
