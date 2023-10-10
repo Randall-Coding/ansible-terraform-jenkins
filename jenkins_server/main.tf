@@ -22,7 +22,7 @@ locals {
 # Jenkins server
 resource "aws_instance" "jenkins" {
   ami           = local.app_output.ubuntu_id
-  instance_type = "t2.micro"
+  instance_type = "t2.small"
   subnet_id     = local.app_output.public_subnet_ids[0]
   tags = {
     Name  = "Jenkins"
