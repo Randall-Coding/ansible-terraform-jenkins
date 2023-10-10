@@ -20,9 +20,9 @@ pipeline {
         }
         stage('Apply Confirm') {
             input {
-                message: "Apply Confirmation"
-                ok: "Apply changes"
-            }
+                message "Apply Confirmation"
+                ok "Apply changes"
+            }            
             steps {
                 echo 'Apply proceeding...'
             }
