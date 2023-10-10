@@ -162,7 +162,7 @@ resource "aws_instance" "web_server" {
     App   = local.application
   }
   key_name               = aws_key_pair.developer.key_name
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id, aws_security_group.allow_grafana.id]
 
   provisioner "local-exec" {
     command = "printf '[main]\n${self.public_ip}' > aws_hosts"
@@ -298,6 +298,31 @@ resource "aws_security_group" "allow_jenkins" {
   }
 }
 
+resource "aws_security_group" "allow_grafana" {
+  name        = "allow_grafana"
+  description = "Allow tcp inbound port 3000"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress {
+    description = "TCP to 3000 for grafana"
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "allow_grafana"
+  }
+}
 
 resource "aws_security_group" "main" {
   name = "main-global"
