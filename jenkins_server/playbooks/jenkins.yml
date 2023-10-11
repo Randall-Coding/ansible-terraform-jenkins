@@ -36,7 +36,7 @@
         name: jenkins
         enabled: true
         state: started
-        
+          
 - name: Install terraform
   hosts: jenkins
   become: yes
@@ -70,4 +70,18 @@
       apt:
         name: terraform
         update_cache: true
+
+- name: Push aws key
+  hosts: jenkins
+  become: yes
+  vars:
+    - ansible_ssh_common_args: '-o IdentitiesOnly=yes'
   
+  tasks:
+    - name: Push key
+      copy: 
+        src: ../../MyAWSKey.pem
+        dest: /var/lib/jenkins/
+        owner: jenkins
+        group: jenkins
+        mode: 700

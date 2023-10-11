@@ -34,7 +34,7 @@ resource "tls_private_key" "generated" {
 
 resource "local_file" "private_key_pem" {
   content  = tls_private_key.generated.private_key_pem
-  filename = var.my_aws_pem
+  filename = var.my_aws_pem  
 }
 
 resource "aws_key_pair" "developer" {
