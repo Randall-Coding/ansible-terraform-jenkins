@@ -45,6 +45,6 @@ resource "aws_instance" "jenkins" {
 resource "null_resource" "jenkins_install" {
   depends_on = [aws_instance.jenkins]
   provisioner "local-exec" {
-    command = "ansible-playbook ./playbooks/jenkins.yml -i jenkins_host --private-key=${var.my_aws_pem} -u ubuntu"
+    command = "ansible-playbook ./playbooks/jenkins.yml -i jenkins_host --private-key=${var.my_jenkins_pem} -u ubuntu"
   }
 }

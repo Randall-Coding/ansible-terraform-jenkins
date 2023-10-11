@@ -73,6 +73,11 @@ variable "my_aws_pem" {
   default = "MyAWSKey.pem"
 }
 
+variable "my_aws_pub" {
+  type = string  
+  default = "wrong pub key"
+}
+
 variable "aws_jenkins_pem" {
   type    = string
   default = "MyAWSKey.pem"

@@ -3,9 +3,9 @@ output "jenkins_ip" {
 }
 
 output "scp_jenkins" {
-    value = "scp -o IdentitiesOnly=true -i ${var.my_aws_pem} ${var.my_aws_pem} ubuntu@${aws_instance.jenkins.public_ip}:/var/lib/jenkins/MyAWSKey.pem"
+    value = "scp -o IdentitiesOnly=true -i ${var.my_jenkins_pem} ${var.my_jenkins_pem} ubuntu@${aws_instance.jenkins.public_ip}:/var/lib/jenkins/MyAWSKey.pem"
 }
 
 output "ssh_jenkins" {
-  value = "ssh -i ${var.my_aws_pem} ubuntu@${aws_instance.jenkins.public_ip} -o IdentitiesOnly=true"
+  value = "ssh -i ${var.my_jenkins_pem} ubuntu@${aws_instance.jenkins.public_ip} -o IdentitiesOnly=true"
 }

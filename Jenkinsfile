@@ -7,6 +7,8 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
         TF_VAR_my_aws_pem = '/var/lib/jenkins/MyAWSKey.pem'
+        TF_VAR_my_jenkins_pem = '/var/lib/jenkins/MyAWSKey.pem'
+        TF_VAR_var.my_aws_pub = credentials('my-aws-pub')
     }
     stages {
         stage('Init') {

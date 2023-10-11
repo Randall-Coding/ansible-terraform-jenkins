@@ -35,6 +35,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 *.pem
+*.pub 
 
 .git/
 aws_hosts

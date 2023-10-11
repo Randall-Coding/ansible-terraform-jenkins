@@ -28,14 +28,12 @@ locals {
   az_names    = data.aws_availability_zones.available.names
 }
 
-resource "tls_private_key" "generated" {
-  algorithm = "RSA"
-}
-
 resource "aws_key_pair" "developer" {
   key_name   = "developer-${var.environment}"
-  public_key = tls_private_key.generated.public_key_openssh
-
+  public_key = try(
+    file("MyAWSKey.pub"),
+    var.my_aws_pub
+    )
   lifecycle {
     ignore_changes = [key_name]
   }
