@@ -1,4 +1,4 @@
 variable "my_jenkins_pem" {
-  type = string
+  type    = string
   default = "../MyAWSKey.pem"
 }

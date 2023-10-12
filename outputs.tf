@@ -16,8 +16,8 @@ output "public_subnet_ids" {
 
 output "security_groups" {
   value = {
-    "${aws_security_group.allow_ssh.name}" = aws_security_group.allow_ssh.id 
-    "${aws_security_group.allow_jenkins.name}" = aws_security_group.allow_jenkins.id 
+    "${aws_security_group.allow_ssh.name}"     = aws_security_group.allow_ssh.id
+    "${aws_security_group.allow_jenkins.name}" = aws_security_group.allow_jenkins.id
   }
 }
 
@@ -29,7 +29,7 @@ output "my_aws_pem" {
 }
 
 output "aws_key_name" {
-  value =  aws_key_pair.developer.key_name
+  value = aws_key_pair.developer.key_name
 }
 
 output "aws_region" {

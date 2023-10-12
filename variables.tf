@@ -74,7 +74,7 @@ variable "my_aws_pem" {
 }
 
 variable "my_aws_pub" {
-  type = string  
+  type    = string
   default = "wrong pub key"
 }
 

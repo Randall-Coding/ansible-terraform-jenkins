@@ -29,11 +29,11 @@ locals {
 }
 
 resource "aws_key_pair" "developer" {
-  key_name   = "developer-${var.environment}"
+  key_name = "developer-${var.environment}"
   public_key = try(
     file("MyAWSKey.pub"),
     var.my_aws_pub
-    )
+  )
   lifecycle {
     ignore_changes = [key_name]
   }
